@@ -530,6 +530,10 @@
                     <div>❌ Wrong</div>
                     <div class="score-number" id="wrongCount">0</div>
                 </div>
+                <div class="score-item">
+                    <div>⏱️ Time</div>
+                    <div class="score-number" id="timerDisplay">0s</div>
+                </div>
             </div>
 
             <div class="problem-box">
@@ -554,16 +558,13 @@
 <!-- Celebration Modal -->
 <div id="celebrationModal" class="celebration-overlay hidden">
     <div class="celebration-content">
-        <div class="celebration-title">🎊 Wow! <span id="celebrationScore">100</span> Points! 🎊</div>
-        <div class="celebration-emoji">🚍</div>
-        <div style="font-size: 2rem; margin: 20px 0;">
-            <div>🚍 Tayo Bus</div>
-            <div>🐻 Rogi</div>
-            <div>🐯 Gani</div>
-            <div>🐰 Rani</div>
-            <div>Coming to celebrate with you!</div>
+        <div class="celebration-title" style="font-size: 3rem; margin-bottom: 30px;">🎊 WAY TO GO! 🎊</div>
+        <div style="font-size: 5rem; margin: 20px 0; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+            <div class="tayo-bus">🚍</div>
+            <div class="tayo-bus">🚌</div>
+            <div class="tayo-bus">🚐</div>
         </div>
-        <div class="tayo-bus">🎉 AMAZING! 🎉</div>
+        <div style="font-size: 2rem; margin: 20px 0; font-weight: bold; color: #333;">🌟 10 Correct Answers! 🌟</div>
         <button class="close-celebration" id="closeCelebration">Continue Learning 💪</button>
     </div>
 </div>
@@ -578,7 +579,9 @@
         numA: 0,
         numB: 0,
         answered: false,
-        scoreMultiplier: 100
+        scoreMultiplier: 100,
+        timerInterval: null,
+        elapsedSeconds: 0
     };
 
     const characters = {
@@ -639,6 +642,11 @@
         document.getElementById('setupView').classList.add('hidden');
         document.getElementById('quizView').classList.remove('hidden');
         document.getElementById('quizPlayerName').textContent = state.playerName;
+        state.elapsedSeconds = 0;
+        state.timerInterval = setInterval(() => {
+            state.elapsedSeconds++;
+            document.getElementById('timerDisplay').textContent = state.elapsedSeconds + 's';
+        }, 1000);
         generateProblem();
     }
 
@@ -698,6 +706,11 @@
                             +10 Points! 🎉
                         </div>
                     `;
+                    
+                    // Check if 10 correct answers reached
+                    if (state.correct === 10) {
+                        setTimeout(() => showCelebration(), 1000);
+                    }
                 } else {
                     state.wrong++;
                     state.score -= 10;
@@ -750,9 +763,11 @@
     }
 
     function goToMenu() {
+        clearInterval(state.timerInterval);
         state.score = 0;
         state.correct = 0;
         state.wrong = 0;
+        state.elapsedSeconds = 0;
         document.getElementById('quizView').classList.add('hidden');
         document.getElementById('setupView').classList.remove('hidden');
         document.getElementById('answerInput').value = '';
