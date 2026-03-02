@@ -511,7 +511,10 @@
                 <div>
                     <h2 style="color: #667eea; font-size: 1.3rem;">Hi <span id="quizPlayerName">Friend</span>! 🚀</h2>
                 </div>
-                <button class="back-button" id="mainMenuBtn" style="margin: 0;">↩️ Menu</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="next-button" id="nextBtn" style="margin: 0;">⏭️ Next</button>
+                    <button class="back-button" id="mainMenuBtn" style="margin: 0;">↩️ Menu</button>
+                </div>
             </div>
 
             <div class="score-display">
@@ -613,6 +616,10 @@
     });
 
     document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        generateProblem();
+        document.getElementById('feedbackArea').innerHTML = '';
+    });
     document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
 
     function startGame() {
