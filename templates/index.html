@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Math Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 400px; margin: auto; }
+        input, select, button { font-size: 1rem; padding: 8px; margin: 4px 0; width: 100%; }
+        .result { background: #f0f0f0; padding: 10px; margin-top: 10px; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Interactive Math</h1>
+    <form method="post">
+        <label for="operation">Operation</label>
+        <select id="operation" name="operation">
+            {% for key, (name, func) in operations.items() %}
+            <option value="{{ key }}">{{ name }}</option>
+            {% endfor %}
+        </select>
+        <label for="a">First number</label>
+        <input type="text" id="a" name="a" required>
+        <label for="b">Second number</label>
+        <input type="text" id="b" name="b" required>
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result is not none %}
+    <div class="result">Result: {{ result }}</div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+</div>
+</body>
+</html>
