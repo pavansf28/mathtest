@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🎮 Math Quest - Learn Math & Have Fun!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .score-board span {
+            font-size: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+            transform: scale(1.02);
+        }
+
+        .problem {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .problem-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffed4e;
+        }
+
+        .operator {
+            font-size: 2rem;
+            margin: 0 10px;
+            color: white;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #333;
+        }
+
+        .btn-next:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .feedback.correct {
+            background: #4caf50;
+            color: white;
+        }
+
+        .feedback.wrong {
+            background: #f44336;
+            color: white;
+        }
+
+        .emoji {
+            font-size: 2rem;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .streak {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-top: 10px;
+        }
+
+        #answerInput::placeholder {
+            color: #bbb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .difficulty {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .difficulty button {
+            flex: 1;
+            padding: 10px;
+            background: #ddd;
+            color: #333;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .difficulty button.active {
+            background: #667eea;
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .difficulty button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🎮 Math Quest</h1>
+    <p class="subtitle">Learn & Master Math!</p>
+
+    <div class="score-board">
+        <span id="scoreDisplay">Correct: 0 | Wrong: 0</span>
+        <div class="streak" id="streakDisplay"></div>
+    </div>
+
+    <div id="setupView">
+        <label for="operationSelect">Choose an Operation:</label>
+        <select id="operationSelect">
+            <option value="">-- Select --</option>
+            <option value="add">➕ Addition</option>
+            <option value="subtract">➖ Subtraction</option>
+            <option value="multiply">✖️ Multiplication</option>
+            <option value="divide">➗ Division</option>
+        </select>
+
+        <label>Difficulty Level:</label>
+        <div class="difficulty">
+            <button class="difficulty-btn active" data-level="easy">Easy (1-10)</button>
+            <button class="difficulty-btn" data-level="medium">Medium (10-100)</button>
+            <button class="difficulty-btn" data-level="hard">Hard (100-1000)</button>
+        </div>
+
+        <button class="btn-submit" id="startBtn" style="width: 100%; margin-top: 20px;">
+            🚀 Start Quiz
+        </button>
+    </div>
+
+    <div id="quizView" class="hidden">
+        <div class="problem">
+            <div class="problem-text">
+                <span class="number" id="numA">5</span>
+                <span class="operator" id="operatorSymbol">+</span>
+                <span class="number" id="numB">3</span>
+            </div>
+            <div class="question">= ?</div>
+        </div>
+
+        <label for="answerInput">Your Answer:</label>
+        <input type="text" id="answerInput" placeholder="Type your answer..." autocomplete="off">
+
+        <div class="button-group">
+            <button class="btn-submit" id="submitBtn">✔️ Submit</button>
+            <button class="btn-next hidden" id="nextBtn">⏭️ Next</button>
+        </div>
+
+        <div id="feedbackArea"></div>
+    </div>
+</div>
+
+<script>
+    const state = {
+        score: { correct: 0, wrong: 0 },
+        streak: 0,
+        difficulty: 'easy',
+        operation: '',
+        numA: 0,
+        numB: 0,
+        answered: false
+    };
+
+    const ranges = {
+        easy: [1, 10],
+        medium: [10, 100],
+        hard: [100, 1000]
+    };
+
+    const operatorSymbols = {
+        add: '+',
+        subtract: '−',
+        multiply: '×',
+        divide: '÷'
+    };
+
+    document.getElementById('startBtn').addEventListener('click', startQuiz);
+    document.getElementById('submitBtn').addEventListener('click', submitAnswer);
+    document.getElementById('nextBtn').addEventListener('click', generateProblem);
+    document.getElementById('answerInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !state.answered) submitAnswer();
+    });
+
+    // Difficulty selector
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.difficulty = btn.dataset.level;
+        });
+    });
+
+    function startQuiz() {
+        const op = document.getElementById('operationSelect').value;
+        if (!op) {
+            alert('Please choose an operation first! 😊');
+            return;
+        }
+        state.operation = op;
+        document.getElementById('setupView').classList.add('hidden');
+        document.getElementById('quizView').classList.remove('hidden');
+        generateProblem();
+    }
+
+    function getRandom(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateProblem() {
+        state.answered = false;
+        const [min, max] = ranges[state.difficulty];
+        state.numA = getRandom(min, max);
+        state.numB = getRandom(min, max);
+
+        // For division, ensure clean results
+        if (state.operation === 'divide') {
+            const divisor = getRandom(1, 10);
+            state.numB = divisor;
+            state.numA = divisor * getRandom(1, 20);
+        }
+
+        document.getElementById('numA').textContent = state.numA;
+        document.getElementById('numB').textContent = state.numB;
+        document.getElementById('operatorSymbol').textContent = operatorSymbols[state.operation];
+        document.getElementById('answerInput').value = '';
+        document.getElementById('answerInput').focus();
+        document.getElementById('feedbackArea').innerHTML = '';
+        document.getElementById('submitBtn').classList.remove('hidden');
+        document.getElementById('nextBtn').classList.add('hidden');
+    }
+
+    function submitAnswer() {
+        const userAnswer = document.getElementById('answerInput').value.trim();
+        if (!userAnswer) {
+            alert('Please enter an answer! 👀');
+            return;
+        }
+
+        state.answered = true;
+
+        fetch('/api/quiz/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                operation: state.operation,
+                a: state.numA,
+                b: state.numB,
+                answer: userAnswer
+            })
+        })
+            .then(r => r.json())
+            .then(data => {
+                const feedbackArea = document.getElementById('feedbackArea');
+                if (data.correct) {
+                    state.score.correct++;
+                    state.streak++;
+                    feedbackArea.innerHTML = `
+                        <div class="feedback correct">
+                            <span class="emoji">🎉</span> Awesome! That's correct!
+                        </div>
+                    `;
+                } else {
+                    state.score.wrong++;
+                    state.streak = 0;
+                    feedbackArea.innerHTML = `
+                        <div class="feedback wrong">
+                            <span class="emoji">💪</span> Not quite! The correct answer is <strong>${data.correct_answer}</strong>
+                        </div>
+                    `;
+                }
+                updateScore();
+                document.getElementById('submitBtn').classList.add('hidden');
+                document.getElementById('nextBtn').classList.remove('hidden');
+                document.getElementById('answerInput').disabled = true;
+            });
+    }
+
+    function updateScore() {
+        document.getElementById('scoreDisplay').textContent =
+            `Correct: ${state.score.correct} | Wrong: ${state.score.wrong}`;
+        if (state.streak > 0) {
+            document.getElementById('streakDisplay').textContent = `🔥 Streak: ${state.streak}`;
+        } else {
+            document.getElementById('streakDisplay').textContent = '';
+        }
+    }
+</script>
+</body>
+</html>
