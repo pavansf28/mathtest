@@ -614,12 +614,6 @@
 
     document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
     document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
-    document.getElementById('skipButton').addEventListener('click', () => {
-        generateProblem();
-        document.getElementById('goButton').style.display = 'inline-block';
-        document.getElementById('skipButton').style.display = 'inline-block';
-        document.getElementById('feedbackArea').innerHTML = '';
-    });
 
     function startGame() {
         const name = document.getElementById('nameInput').value.trim();
@@ -720,7 +714,15 @@
                 }
 
                 document.getElementById('goButton').style.display = 'none';
-                document.getElementById('skipButton').style.display = 'inline-block';
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'next-button';
+                nextBtn.textContent = '⏭️ Next Question';
+                nextBtn.addEventListener('click', () => {
+                    generateProblem();
+                    document.getElementById('goButton').style.display = 'inline-block';
+                    nextBtn.remove();
+                });
+                feedback.appendChild(nextBtn);
             });
     }
 
