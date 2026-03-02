@@ -557,6 +557,21 @@
     </div>
 </div>
 
+<!-- Mid-Celebration Modal (5 correct) -->
+<div id="midCelebrationModal" class="celebration-overlay hidden">
+    <div class="celebration-content">
+        <div class="celebration-title" style="font-size: 2.5rem; margin-bottom: 20px;">🎉 Congratulations! 🎉</div>
+        <div style="font-size: 4rem; margin: 20px 0; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+            <div>🎈</div>
+            <div>🎈</div>
+            <div>🎈</div>
+        </div>
+        <div style="font-size: 2rem; margin: 20px 0; font-weight: bold; color: #333;">5 Correct Answers!</div>
+        <div style="font-size: 5rem; margin: 10px 0;">👏👏👏</div>
+        <button class="close-celebration" id="closeMidCelebration" style="background: #667eea; color: white;">Keep Going!</button>
+    </div>
+</div>
+
 <!-- Celebration Modal -->
 <div id="celebrationModal" class="celebration-overlay hidden">
     <div class="celebration-content">
@@ -631,6 +646,9 @@
     });
     document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
     document.getElementById('celebrationMenuBtn').addEventListener('click', goToMenuFromCelebration);
+    document.getElementById('closeMidCelebration').addEventListener('click', () => {
+        document.getElementById('midCelebrationModal').classList.add('hidden');
+    });
 
     function startGame() {
         const name = document.getElementById('nameInput').value.trim();
@@ -714,7 +732,12 @@
                         </div>
                     `;
                     
-                    // Check if 10 correct answers reached
+                    // milestone checks
+                    if (state.correct === 5) {
+                        setTimeout(() => {
+                            document.getElementById('midCelebrationModal').classList.remove('hidden');
+                        }, 500);
+                    }
                     if (state.correct === 10) {
                         setTimeout(() => showCelebration(), 1000);
                     }
