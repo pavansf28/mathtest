@@ -52,6 +52,8 @@
             z-index: 5;
             animation: titleBounce 2s ease-in-out infinite;
             letter-spacing: 2px;
+            white-space: nowrap;
+            padding: 0 20px;
         }
 
         @keyframes titleBounce {
@@ -565,7 +567,11 @@
             <div class="tayo-bus">🚐</div>
         </div>
         <div style="font-size: 2rem; margin: 20px 0; font-weight: bold; color: #333;">🌟 10 Correct Answers! 🌟</div>
-        <button class="close-celebration" id="closeCelebration">Continue Learning 💪</button>
+        <div style="font-size: 1.3rem; margin: 20px 0; color: #333;">Want to continue and get more milestones?</div>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <button class="close-celebration" id="closeCelebration" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0;">Continue Learning 💪</button>
+            <button class="close-celebration" id="celebrationMenuBtn" style="background: #999; margin: 0;">Back to Menu 🏠</button>
+        </div>
     </div>
 </div>
 
@@ -624,6 +630,7 @@
         document.getElementById('feedbackArea').innerHTML = '';
     });
     document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
+    document.getElementById('celebrationMenuBtn').addEventListener('click', goToMenuFromCelebration);
 
     function startGame() {
         const name = document.getElementById('nameInput').value.trim();
@@ -760,6 +767,11 @@
 
     function closeCelebration() {
         document.getElementById('celebrationModal').classList.add('hidden');
+    }
+
+    function goToMenuFromCelebration() {
+        document.getElementById('celebrationModal').classList.add('hidden');
+        goToMenu();
     }
 
     function goToMenu() {
