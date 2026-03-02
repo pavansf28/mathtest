@@ -3,7 +3,757 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>� Disney Math Adventure</title>
+    <title>PJ's MATH - Fun Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background characters */
+        .character {
+            position: fixed;
+            font-size: 60px;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        .char1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .char2 { top: 30%; right: 15%; animation-delay: 1s; }
+        .char3 { bottom: 20%; left: 15%; animation-delay: 2s; }
+        .char4 { top: 50%; right: 10%; animation-delay: 1.5s; }
+        .char5 { bottom: 10%; right: 20%; animation-delay: 0.5s; }
+
+        .title-floating {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.6);
+            z-index: 5;
+            animation: titleBounce 2s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+
+        @keyframes titleBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4);
+            padding: 50px;
+            max-width: 700px;
+            width: 100%;
+            animation: slideIn 0.7s ease-out;
+            text-align: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #999;
+            margin-bottom: 40px;
+        }
+
+        .name-input-group {
+            margin-bottom: 30px;
+        }
+
+        .name-input-group input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+            border: 3px solid #667eea;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .name-input-group input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+            transform: scale(1.02);
+        }
+
+        #setupView, #quizView {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .operations-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .op-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 30px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .op-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: left 0.5s;
+        }
+
+        .op-button:hover::before {
+            left: 100%;
+        }
+
+        .op-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .op-button.add { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+        .op-button.subtract { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .op-button.multiply { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .op-button.divide { background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%); }
+
+        .op-char {
+            display: block;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .op-name {
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            padding: 40px;
+            margin: 30px 0;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .problem-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            letter-spacing: 5px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            margin-top: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 20px;
+            font-size: 1.8rem;
+            border: 3px solid #667eea;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+            transform: scale(1.02);
+        }
+
+        .go-button {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 20px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .go-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .go-button:active {
+            transform: scale(0.98);
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 1.8rem;
+            color: #667eea;
+        }
+
+        .feedback-area {
+            margin-top: 30px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feedback-box {
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 100%;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotateZ(-10deg);
+            }
+            50% {
+                transform: scale(1.1) rotateZ(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateZ(0deg);
+            }
+        }
+
+        .feedback-box.correct {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+        }
+
+        .feedback-box.wrong {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+        }
+
+        .character-shoutout {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: bounce 0.8s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .correct-answer-display {
+            margin-top: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .next-button, .back-button {
+            border: none;
+            border-radius: 20px;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .next-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .back-button {
+            background: #999;
+            margin-left: 10px;
+        }
+
+        .next-button:hover, .back-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Celebration overlay */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .celebration-content {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 40px;
+            padding: 50px;
+            text-align: center;
+            animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .celebration-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .celebration-emoji {
+            font-size: 4rem;
+            animation: celebrateSpin 2s infinite;
+        }
+
+        @keyframes celebrateSpin {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(360deg) scale(1.2); }
+        }
+
+        .tayo-bus {
+            font-size: 3rem;
+            animation: moveAcross 3s infinite;
+        }
+
+        @keyframes moveAcross {
+            0% { transform: translateX(-100px); }
+            50% { transform: translateX(100px); }
+            100% { transform: translateX(-100px); }
+        }
+
+        .close-celebration {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .close-celebration:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+<div class="title-floating">🎭 PJ's MATH - Fun Learning 📚</div>
+
+<!-- Floating Disney Characters -->
+<div class="character char1">🐭</div>
+<div class="character char2">🚍</div>
+<div class="character char3">🦁</div>
+<div class="character char4">🧞</div>
+<div class="character char5">👸</div>
+
+<div class="container">
+    <div class="main-card">
+        <!-- Name Entry View -->
+        <div id="nameView">
+            <h1>👋 Welcome!</h1>
+            <p class="subtitle">Let's learn math together!</p>
+
+            <div class="name-input-group">
+                <label for="nameInput" style="font-size: 1.2rem; color: #333; margin-bottom: 10px; display: block;">What's your name?</label>
+                <input type="text" id="nameInput" placeholder="Enter your name..." autocomplete="off">
+                <button class="go-button" id="startNameBtn" style="width: 100%;">✨ Continue</button>
+            </div>
+        </div>
+
+        <!-- Setup View -->
+        <div id="setupView" class="hidden">
+            <h1>Hello, <span id="playerName">Friend</span>! 👋</h1>
+            <p class="subtitle">Choose an operation to start</p>
+
+            <div class="operations-grid">
+                <button class="op-button add" data-op="add">
+                    <span class="op-char">🐭</span>
+                    <span class="op-name">Addition</span>
+                </button>
+                <button class="op-button subtract" data-op="subtract">
+                    <span class="op-char">🦁</span>
+                    <span class="op-name">Subtraction</span>
+                </button>
+                <button class="op-button multiply" data-op="multiply">
+                    <span class="op-char">👸</span>
+                    <span class="op-name">Multiplication</span>
+                </button>
+                <button class="op-button divide" data-op="divide">
+                    <span class="op-char">🧞</span>
+                    <span class="op-name">Division</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz View -->
+        <div id="quizView" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="color: #667eea; font-size: 1.3rem;">Hi <span id="quizPlayerName">Friend</span>! 🚀</h2>
+                </div>
+                <button class="back-button" id="mainMenuBtn" style="margin: 0;">↩️ Menu</button>
+            </div>
+
+            <div class="score-display">
+                <div class="score-item">
+                    <div>💰 Score</div>
+                    <div class="score-number" id="scorePoints">0</div>
+                </div>
+                <div class="score-item">
+                    <div>✅ Correct</div>
+                    <div class="score-number" id="correctCount">0</div>
+                </div>
+                <div class="score-item">
+                    <div>❌ Wrong</div>
+                    <div class="score-number" id="wrongCount">0</div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <div class="problem-display">
+                    <span id="numA">5</span>
+                    <span id="operator" style="margin: 0 15px;">+</span>
+                    <span id="numB">3</span>
+                </div>
+                <div class="question-text">= ?</div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="answerInput" placeholder="Type your answer..." autocomplete="off">
+                <button class="go-button" id="goButton">🚀 GO!</button>
+            </div>
+
+            <div class="feedback-area" id="feedbackArea"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Celebration Modal -->
+<div id="celebrationModal" class="celebration-overlay hidden">
+    <div class="celebration-content">
+        <div class="celebration-title">🎊 Wow! <span id="celebrationScore">100</span> Points! 🎊</div>
+        <div class="celebration-emoji">🚍</div>
+        <div style="font-size: 2rem; margin: 20px 0;">
+            <div>🚍 Tayo Bus</div>
+            <div>🐻 Rogi</div>
+            <div>🐯 Gani</div>
+            <div>🐰 Rani</div>
+            <div>Coming to celebrate with you!</div>
+        </div>
+        <div class="tayo-bus">🎉 AMAZING! 🎉</div>
+        <button class="close-celebration" id="closeCelebration">Continue Learning 💪</button>
+    </div>
+</div>
+
+<script>
+    const state = {
+        playerName: '',
+        score: 0,
+        correct: 0,
+        wrong: 0,
+        operation: '',
+        numA: 0,
+        numB: 0,
+        answered: false,
+        scoreMultiplier: 100
+    };
+
+    const characters = {
+        add: { emoji: '🐭', name: 'Mickey' },
+        subtract: { emoji: '🦁', name: 'Simba' },
+        multiply: { emoji: '👸', name: 'Cinderella' },
+        divide: { emoji: '🧞', name: 'Genie' }
+    };
+
+    const operators = {
+        add: '+',
+        subtract: '−',
+        multiply: '×',
+        divide: '÷'
+    };
+
+    const celebrateMessages = {
+        correct: ['🎉 Awesome!', '⭐ Super Star!', '🌟 Brilliant!', '👏 Perfect!', '🎊 Fantastic!'],
+        wrong: ['💪 Almost there!', '🎯 Close call!', '📚 Keep learning!', '🌈 Try again!', '🚀 You got this!']
+    };
+
+    // Event listeners
+    document.getElementById('startNameBtn').addEventListener('click', startGame);
+    document.getElementById('nameInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') startGame();
+    });
+
+    document.querySelectorAll('.op-button').forEach(btn => {
+        btn.addEventListener('click', startQuiz);
+    });
+
+    document.getElementById('goButton').addEventListener('click', submitAnswer);
+    document.getElementById('answerInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !state.answered) submitAnswer();
+    });
+
+    document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
+    document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
+
+    function startGame() {
+        const name = document.getElementById('nameInput').value.trim();
+        if (!name) {
+            alert('Please enter your name! 👤');
+            return;
+        }
+        state.playerName = name;
+        document.getElementById('nameView').classList.add('hidden');
+        document.getElementById('setupView').classList.remove('hidden');
+        document.getElementById('playerName').textContent = name;
+    }
+
+    function startQuiz(e) {
+        state.operation = e.target.closest('.op-button').dataset.op;
+        document.getElementById('setupView').classList.add('hidden');
+        document.getElementById('quizView').classList.remove('hidden');
+        document.getElementById('quizPlayerName').textContent = state.playerName;
+        generateProblem();
+    }
+
+    function generateProblem() {
+        state.answered = false;
+        state.numA = Math.floor(Math.random() * 100) + 1;
+        state.numB = Math.floor(Math.random() * 100) + 1;
+
+        if (state.operation === 'divide') {
+            state.numB = Math.floor(Math.random() * 10) + 1;
+            state.numA = state.numB * Math.floor(Math.random() * 20);
+        }
+
+        document.getElementById('numA').textContent = state.numA;
+        document.getElementById('numB').textContent = state.numB;
+        document.getElementById('operator').textContent = operators[state.operation];
+        document.getElementById('answerInput').value = '';
+        document.getElementById('answerInput').focus();
+        document.getElementById('feedbackArea').innerHTML = '';
+        document.getElementById('goButton').style.display = 'inline-block';
+    }
+
+    function submitAnswer() {
+        const userAnswer = document.getElementById('answerInput').value.trim();
+        if (!userAnswer) {
+            alert('Please enter your answer! 📝');
+            return;
+        }
+
+        state.answered = true;
+
+        fetch('/api/quiz/check', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                operation: state.operation,
+                a: state.numA,
+                b: state.numB,
+                answer: userAnswer
+            })
+        })
+            .then(r => r.json())
+            .then(data => {
+                const feedback = document.getElementById('feedbackArea');
+                const char = characters[state.operation];
+                const randomMsg = data.correct
+                    ? celebrateMessages.correct[Math.floor(Math.random() * celebrateMessages.correct.length)]
+                    : celebrateMessages.wrong[Math.floor(Math.random() * celebrateMessages.wrong.length)];
+
+                if (data.correct) {
+                    state.correct++;
+                    state.score += 10;
+                    feedback.innerHTML = `
+                        <div class="character-shoutout">${char.emoji}</div>
+                        <div class="feedback-box correct">
+                            ${randomMsg}<br>
+                            +10 Points! 🎉
+                        </div>
+                    `;
+                } else {
+                    state.wrong++;
+                    state.score -= 10;
+                    if (state.score < 0) state.score = 0;
+                    feedback.innerHTML = `
+                        <div class="character-shoutout">${char.emoji}</div>
+                        <div class="feedback-box wrong">
+                            ${randomMsg}<br>
+                            The answer is <strong>${data.correct_answer}</strong>
+                            <div class="correct-answer-display">💡 ${state.numA} ${operators[state.operation]} ${state.numB} = ${data.correct_answer}</div>
+                            -10 Points
+                        </div>
+                    `;
+                }
+
+                updateScore();
+
+                // Check if score reached celebration milestone
+                if (state.score > 0 && state.score % state.scoreMultiplier === 0) {
+                    showCelebration();
+                }
+
+                document.getElementById('goButton').style.display = 'none';
+
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'next-button';
+                nextBtn.textContent = '⏭️ Next Question';
+                nextBtn.addEventListener('click', () => {
+                    generateProblem();
+                    document.getElementById('goButton').style.display = 'inline-block';
+                    nextBtn.remove();
+                });
+                feedback.appendChild(nextBtn);
+            });
+    }
+
+    function updateScore() {
+        document.getElementById('scorePoints').textContent = state.score;
+        document.getElementById('correctCount').textContent = state.correct;
+        document.getElementById('wrongCount').textContent = state.wrong;
+    }
+
+    function showCelebration() {
+        document.getElementById('celebrationScore').textContent = state.score;
+        document.getElementById('celebrationModal').classList.remove('hidden');
+    }
+
+    function closeCelebration() {
+        document.getElementById('celebrationModal').classList.add('hidden');
+    }
+
+    function goToMenu() {
+        state.score = 0;
+        state.correct = 0;
+        state.wrong = 0;
+        document.getElementById('quizView').classList.add('hidden');
+        document.getElementById('setupView').classList.remove('hidden');
+        document.getElementById('answerInput').value = '';
+        updateScore();
+    }
+</script>
+</body>
+</html>
     <style>
         * {
             margin: 0;
