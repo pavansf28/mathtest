@@ -634,7 +634,7 @@
         btn.addEventListener('click', startQuiz);
     });
 
-    &
+    document.getElementById('goButton').addEventListener('click', submitAnswer);
     document.getElementById('goButton').addEventListener('touchend', submitAnswer);
     document.getElementById('answerInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !state.answered) submitAnswer();
@@ -1249,7 +1249,7 @@
         btn.addEventListener('click', startQuiz);
     });
 
-    &
+    document.getElementById('goButton').addEventListener('click', submitAnswer);
     document.getElementById('goButton').addEventListener('touchend', submitAnswer);
     document.getElementById('answerInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !state.answered) submitAnswer();
