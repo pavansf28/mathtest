@@ -624,30 +624,32 @@
         wrong: ['💪 Almost there!', '🎯 Close call!', '📚 Keep learning!', '🌈 Try again!', '🚀 You got this!']
     };
 
-    // Event listeners
-    document.getElementById('startNameBtn').addEventListener('click', startGame);
-    document.getElementById('nameInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') startGame();
-    });
+    // Attach all event listeners after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('startNameBtn').addEventListener('click', startGame);
+        document.getElementById('nameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') startGame();
+        });
 
-    document.querySelectorAll('.op-button').forEach(btn => {
-        btn.addEventListener('click', startQuiz);
-    });
+        document.querySelectorAll('.op-button').forEach(btn => {
+            btn.addEventListener('click', startQuiz);
+        });
 
-    document.getElementById('goButton').addEventListener('click', submitAnswer);
-    document.getElementById('answerInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !state.answered) submitAnswer();
-    });
+        document.getElementById('goButton').addEventListener('click', submitAnswer);
+        document.getElementById('answerInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !state.answered) submitAnswer();
+        });
 
-    document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        generateProblem();
-        document.getElementById('feedbackArea').innerHTML = '';
-    });
-    document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
-    document.getElementById('celebrationMenuBtn').addEventListener('click', goToMenuFromCelebration);
-    document.getElementById('closeMidCelebration').addEventListener('click', () => {
-        document.getElementById('midCelebrationModal').classList.add('hidden');
+        document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            generateProblem();
+            document.getElementById('feedbackArea').innerHTML = '';
+        });
+        document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
+        document.getElementById('celebrationMenuBtn').addEventListener('click', goToMenuFromCelebration);
+        document.getElementById('closeMidCelebration').addEventListener('click', () => {
+            document.getElementById('midCelebrationModal').classList.add('hidden');
+        });
     });
 
     function startGame() {

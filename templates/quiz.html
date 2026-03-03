@@ -456,6 +456,32 @@
         .close-celebration:hover {
             transform: scale(1.1);
         }
+        /* Mobile responsive styles */
+        @media (max-width: 600px) {
+            .main-card {
+                padding: 15px;
+                border-radius: 18px;
+                max-width: 98vw;
+            }
+            .problem-box {
+                padding: 15px;
+                font-size: 1.2rem;
+            }
+            .input-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .go-button {
+                width: 100%;
+                font-size: 1.2rem;
+                padding: 15px 0;
+            }
+            .score-display {
+                flex-direction: column;
+                gap: 8px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -624,31 +650,32 @@
         wrong: ['💪 Almost there!', '🎯 Close call!', '📚 Keep learning!', '🌈 Try again!', '🚀 You got this!']
     };
 
-    // Event listeners
-    document.getElementById('startNameBtn').addEventListener('click', startGame);
-    document.getElementById('nameInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') startGame();
-    });
+    // Attach all event listeners after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('startNameBtn').addEventListener('click', startGame);
+        document.getElementById('nameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') startGame();
+        });
 
-    document.querySelectorAll('.op-button').forEach(btn => {
-        btn.addEventListener('click', startQuiz);
-    });
+        document.querySelectorAll('.op-button').forEach(btn => {
+            btn.addEventListener('click', startQuiz);
+        });
 
-    &
-    document.getElementById('goButton').addEventListener('touchend', submitAnswer);
-    document.getElementById('answerInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !state.answered) submitAnswer();
-    });
+        document.getElementById('goButton').addEventListener('touchend', submitAnswer);
+        document.getElementById('answerInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !state.answered) submitAnswer();
+        });
 
-    document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        generateProblem();
-        document.getElementById('feedbackArea').innerHTML = '';
-    });
-    document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
-    document.getElementById('celebrationMenuBtn').addEventListener('click', goToMenuFromCelebration);
-    document.getElementById('closeMidCelebration').addEventListener('click', () => {
-        document.getElementById('midCelebrationModal').classList.add('hidden');
+        document.getElementById('mainMenuBtn').addEventListener('click', goToMenu);
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            generateProblem();
+            document.getElementById('feedbackArea').innerHTML = '';
+        });
+        document.getElementById('closeCelebration').addEventListener('click', closeCelebration);
+        document.getElementById('celebrationMenuBtn').addEventListener('click', goToMenuFromCelebration);
+        document.getElementById('closeMidCelebration').addEventListener('click', () => {
+            document.getElementById('midCelebrationModal').classList.add('hidden');
+        });
     });
 
     function startGame() {
@@ -1245,17 +1272,22 @@
     };
 
     // Event listeners
-    document.querySelectorAll('.op-button').forEach(btn => {
-        btn.addEventListener('click', startQuiz);
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.op-button').forEach(btn => {
+            btn.addEventListener('click', startQuiz);
+        });
+        // Attach both click and touchend for GO button
+        const goBtn = document.getElementById('goButton');
+        goBtn.addEventListener('click', submitAnswer);
+        goBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            submitAnswer();
+        });
+        document.getElementById('answerInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !state.answered) submitAnswer();
+        });
+        document.getElementById('backButton').addEventListener('click', goBack);
     });
-
-    &
-    document.getElementById('goButton').addEventListener('touchend', submitAnswer);
-    document.getElementById('answerInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !state.answered) submitAnswer();
-    });
-
-    document.getElementById('backButton').addEventListener('click', goBack);
 
     function startQuiz(e) {
         state.operation = e.target.closest('.op-button').dataset.op;
