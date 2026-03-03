@@ -1,68 +1,32 @@
-# Math operation functions
+"""Unit tests for math_ops.py."""
+import pytest
+from math_ops import add, subtract, multiply, divide
 
 
-def add(a, b):
-    """Return the sum of two numbers."""
-    return a + b
+def test_add():
+    assert add(2, 3) == 5
+    assert add(-1, 1) == 0
+    assert add(0, 0) == 0
 
 
-def subtract(a, b):
-    """Return the difference of two numbers."""
-    return a - b
-
-def multiply(a, b):
-    """Return the product of two numbers."""
-    return a * b
-
-def divide(a, b):
-    """Return the quotient of two numbers. Handle division by zero."""
-    if b == 0:
-        return "Error: Division by zero is undefined."
-    return a / b
+def test_subtract():
+    assert subtract(10, 4) == 6
+    assert subtract(0, 5) == -5
+    assert subtract(-3, -3) == 0
 
 
-
-# Test functions
-
-def main():
-    """Provide an interactive menu for the user to choose operations."""
-    operations = {
-        "1": ("Add", add),
-        "2": ("Subtract", subtract),
-        "3": ("Multiply", multiply),
-        "4": ("Divide", divide),
-    }
-
-    while True:
-        print("\nSelect operation:")
-        for key, (name, _) in operations.items():
-            print(f"{key}. {name}")
-        print("q. Quit")
-
-        choice = input("Enter your choice: ").strip()
-        if choice == "q":
-            print("Goodbye!")
-            break
-
-        if choice not in operations:
-            print("Invalid selection, try again.")
-            continue
-
-        try:
-            a = float(input("Enter first number: "))
-            b = float(input("Enter second number: "))
-        except ValueError:
-            print("Please enter valid numbers.")
-            continue
-
-        name, func = operations[choice]
-        try:
-            result = func(a, b)
-        except Exception as exc:
-            print(f"Error during {name.lower()}: {exc}")
-        else:
-            print(f"Result of {name.lower()} is {result}")
+def test_multiply():
+    assert multiply(3, 4) == 12
+    assert multiply(-2, 5) == -10
+    assert multiply(0, 100) == 0
 
 
-if __name__ == "__main__":
-    main()    
+def test_divide():
+    assert divide(10, 2) == 5.0
+    assert divide(7, 2) == pytest.approx(3.5)
+    assert divide(-6, 3) == -2.0
+
+
+def test_divide_by_zero():
+    with pytest.raises(ValueError, match="Cannot divide by zero"):
+        divide(5, 0)
