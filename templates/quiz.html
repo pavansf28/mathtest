@@ -513,7 +513,7 @@
                 <div>
                     <h2 style="color: #667eea; font-size: 1.3rem;">Hi <span id="quizPlayerName">Friend</span>! 🚀</h2>
                 </div>
-                <div style="display: flex; gap: 10px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="next-button" id="nextBtn" style="margin: 0;">⏭️ Next</button>
                     <button class="back-button" id="mainMenuBtn" style="margin: 0;">↩️ Menu</button>
                 </div>
@@ -764,6 +764,8 @@
                 }
 
                 document.getElementById('goButton').style.display = 'none';
+                // blur answer to dismiss mobile keyboard and reveal buttons
+                document.getElementById('answerInput').blur();
 
                 const nextBtn = document.createElement('button');
                 nextBtn.className = 'next-button';
